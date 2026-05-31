@@ -4,7 +4,7 @@ locals {
 }
 
 # 2. إنشاء الـ Security Group باسم webSG
-resource "aws_security_group" "web_sg" {
+resource "aws_security_group" "webSG" {
   name        = "webSG"
   description = "Security group for web and application tiers"
   vpc_id      = var.vpc_id_from_outside
@@ -33,6 +33,11 @@ resource "aws_security_group" "web_sg" {
   }
 }
 
+# create ssh key
+resource "aws_key_pair" "MyKey_SSH" {
+  key_name   = "aws-ubuntu"
+  public_key = file("~/.ssh/ubuntu-aws.pub")
+}
 # 3. إنشاء سيرفرات الـ EC2 داخل الـ Private Subnets الممررة للموديول
 resource "aws_instance" "web_app_instances" {
   # نجعل الحلقة تدور حول الـ Subnets القادمة من موديول الشبكة
@@ -40,10 +45,11 @@ resource "aws_instance" "web_app_instances" {
 
   ami           = "ami-0754facaaac92a5bb" 
   instance_type = "t3.micro"
+  key_name =  "aws-ubuntu"
 
   # التصحيح: نأخذ الـ ID الخاص بالـ Subnet الحالية في اللفة (Iteration)
   subnet_id              = each.value
-  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  vpc_security_group_ids = [aws_security_group.webSG.id]
 
   # استدعاء ملف الـ User Data من نفس المجلد
   user_data = file("${path.module}/userdata.sh")
@@ -59,4 +65,17 @@ resource "aws_instance" "web_app_instances" {
   tags = {
     Name = "web_app_tier_${each.key}"
   }
+}
+
+
+
+
+
+
+
+
+
+output "web_sg_id" {
+  value       = aws_security_group.webSG.id
+  description = "مخرج يرسل الـ ID الخاص بـ WebSG للموديولات الأخرى"
 }
