@@ -1,4 +1,4 @@
-# terraform-project
+
 # Multi-Tier Web Application Architecture on AWS
 
 This project outlines the design and deployment of a highly available, secure, and scalable multi-tier web application deployed within a custom AWS Virtual Private Cloud (VPC) across multiple Availability Zones.
