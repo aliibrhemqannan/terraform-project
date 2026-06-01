@@ -20,7 +20,7 @@ variable "allocated_storage" {
 
 variable "engine_version" {
   type    = string
-  default = "8.0.35" # يفضل استخدام نسخة مستقرة وحديثة من MySQL 8.0
+  default = "8.0.46" # يفضل استخدام نسخة مستقرة وحديثة من MySQL 8.0
 }
 
 variable "instance_class" {
@@ -40,6 +40,6 @@ variable "username" {
 
 variable "password" {
   type      = string
-  default   = "P@ssw0rd1ali" # يفضل استخدام كلمة مرور قوية دائمًا
+  default   = "MyPass123!" # يفضل استخدام كلمة مرور قوية دائمًا
   sensitive = true
 }
